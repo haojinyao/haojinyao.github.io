@@ -67,7 +67,7 @@ GROUP BY cno;
 
 *PIPES_AS_CONCAT
 
-将 || 视为字符串的连接操作符而非 或 运算符，这和Oracle数据库是一样的，也和字符串的拼接函数 CONCAT() 相类似
+将 \|\| 视为字符串的连接操作符而非 或 运算符，这和Oracle数据库是一样的，也和字符串的拼接函数 CONCAT() 相类似
 
 *NO_TABLE_OPTIONS
 
