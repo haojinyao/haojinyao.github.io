@@ -246,6 +246,6 @@ private void init(ThreadGroup g, Runnable target, String name,
 
 &emsp;&emsp;拖更了许久，仅拼凑出这样一篇文章。纵然可能忙于很多事，但不可否认、不可推卸的是偷懒了。写到后面，也懒得转述为自己的语句了。总之，确实是做的很不好。以后宁愿不做很深入的研究分析，也要保持习惯，争取多更新。
 
-摘自：
+摘自：  
 1.<https://mp.weixin.qq.com/s/z-7y1FBAvy-7wC2_jndbkw>  
 2.<https://blog.51cto.com/2179425/2082743>
