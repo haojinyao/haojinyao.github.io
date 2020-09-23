@@ -225,15 +225,18 @@ private void init(ThreadGroup g, Runnable target, String name,
 &emsp;&emsp;这段代码，每个线程有自己的ThreadLocalMap，每个ThreadLocalMap中根据需要初始加载threadSession,这样的好处就是介于singleton与prototype之间，应用singleton无法解决线程，应用prototype开销又太大，有了ThreadLocal之后就好了，对于需要线程“霸占”的变量用ThreadLocal，而该类实例的方法均可以共享。
 
 &emsp;&emsp;此外，我们知道在一般情况下，只有无状态的Bean才可以在多线程环境下共享，在Spring中，绝大部分Bean都可以声明为singleton作用域。就是因为Spring对一些Bean（如RequestContextHolder、TransactionSynchronizationManager、LocaleContextHolder等）中非线程安全的“状态性对象”采用ThreadLocal进行封装，让它们也成为线程安全的“状态性对象”，因此有状态的Bean就能够以singleton的方式在多线程中正常工作了。
+
 &emsp;&emsp;一般的Web应用划分为展现层、服务层和持久层三个层次，在不同的层中编写对应的逻辑，下层通过接口向上层开放功能调用。在一般情况下，从接收请求到返回响应所经过的所有程序调用都同属于一个线程。这样用户就可以根据需要，将一些非线程安全的变量（比如Connection）以ThreadLocal存放，在同一次请求响应的调用线程中，所有对象所访问的同一ThreadLocal变量都是当前线程所绑定的。
 
 &emsp;&emsp;在使用ThreadLocal时，很多人会发现内存泄漏：虽然ThreadLocalMap已经使用了weakReference，但是还是建议能够显示的使用remove方法。
 
 ### 与Thread同步机制的比较
 &emsp;&emsp;ThreadLocal和线程同步机制相比有什么优势呢？ThreadLocal和线程同步机制都是为了解决多线程中相同变量的访问冲突问题。
+
 &emsp;&emsp;在同步机制中，通过对象的锁机制保证同一时间只有一个线程访问变量。这时该变量是多个线程共享的，使用同步机制要求程序缜密地分析什么时候对变量进行读写，什么时候需要锁定某个对象，什么时候释放对象锁等繁杂的问题，程序设计和编写难度相对较大。
 
 &emsp;&emsp;而ThreadLocal则从另一个角度来解决多线程的并发访问。ThreadLocal为每一个线程提供一个独立的变量副本，从而隔离了多个线程对访问数据的冲突。因为每一个线程都拥有自己的变量副本，从而也就没有必要对该变量进行同步了。ThreadLocal提供了线程安全的对象封装，在编写多线程代码时，可以把不安全的变量封装进ThreadLocal。
+
 &emsp;&emsp;由于ThreadLocal中可以持有任何类型的对象，低版本JDK所提供的get()返回的是Object对象，需要强制类型转换。但JDK 5.0通过泛型很好的解决了这个问题，在一定程度上简化ThreadLocal的使用。
 
 &emsp;&emsp;概括起来说，对于多线程资源共享的问题，同步机制采用了“以时间换空间”的方式：访问串行化，对象共享化。而ThreadLocal采用了“以空间换时间”的方式：访问并行化，对象独享化。前者仅提供一份变量，让不同的线程排队访问，而后者为每一个线程都提供了一份变量，因此可以同时访问而互不影响。
